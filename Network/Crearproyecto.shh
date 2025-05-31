@@ -1,0 +1,9 @@
+Crear proyecto
+openstack project create --description "Chatbot" TECGPT --domain default
+Crear red
+openstack network create --provider-physical-network provider --provider-network-type vlan --provider-segment 15 TECGPTRED --project TECGPT
+Crear subred
+openstack subnet create --subnet-range 172.20.100.0/24 --gateway 172.20.100.1 --network TECGPTRED --allocation-pool start=172.20.100.10,end=172.20.100.200 --dns-nameserver 8.8.8.8 --project TECGPT GPT
+Agregar usuario
+openstack user create --domain default --project TECGPT --password FUCWIRE TECGPTUSER
+openstack role add --project TECGPT --user TECGPTUSER member
