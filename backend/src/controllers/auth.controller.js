@@ -5,6 +5,8 @@ import jwt from 'jsonwebtoken';
 
 function validateRegisterInput({email, password}){
 
+    const minPasswordLength = 8;
+
     const tecEmailRegex = /^[a-zA-Z0-9._%+-]+@tec\.mx$/;
     
     if (!email || !password) {
@@ -15,7 +17,7 @@ function validateRegisterInput({email, password}){
         return "Invalid email format. Please use a @tec.mx email address."
     }
 
-    if (password.length < 8) {
+    if (password.length < minPasswordLength) {
         return "Password must be at least 8 characters long"
     }
 
