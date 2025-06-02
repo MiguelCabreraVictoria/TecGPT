@@ -1,5 +1,6 @@
 import authRoutes from "./routes/auth.routes.js";
 import express from "express";
+import rateLimit from "express-rate-limit";
 import morgan from "morgan";
 import cors from "cors";
 import helmet from "helmet";
@@ -20,11 +21,21 @@ app.use(
     credentials: true, // Permite enviar cookies y encabezados de autenticación
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"], // Permite encabezados específicos
-    
+    legacyHeaders: false, // Desactiva encabezados obsoletos
   })
 )
 
+
 // Security 
+
+app.use(
+  rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutos
+    max: 100,
+    standardHeaders: true, // Devuelve información de límite de solicitudes en los encabezados
+  })
+)
+
 app.use(
   helmet({
     contentSecurityPolicy: isProduction // Activa CSP (Content Security Policy) que es una medida de seguridad para prevenir ataques XSS y otros tipos de inyecciones
