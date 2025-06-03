@@ -1,6 +1,6 @@
 // src/pages/Login.jsx
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 export default function Login({ onLogin }) {
   const [email, setEmail] = useState('');
@@ -15,7 +15,7 @@ export default function Login({ onLogin }) {
       return;
     }
 
-    // Simulate successful login
+    // Simula login exitoso
     onLogin();
     navigate('/chat');
   };
@@ -40,6 +40,14 @@ export default function Login({ onLogin }) {
           />
           <button type="submit">Login</button>
         </form>
+
+        {/* ========================= */}
+        {/* Opción de Registrarse */}
+        {/* ========================= */}
+        <div style={{ marginTop: '1rem', textAlign: 'center' }}>
+            {' '}
+          <Link to="/register">Register here</Link>
+        </div>
       </div>
     </div>
   );

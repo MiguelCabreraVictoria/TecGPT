@@ -4,11 +4,15 @@ import rateLimit from "express-rate-limit";
 import morgan from "morgan";
 import cors from "cors";
 import helmet from "helmet";
+import { setupSwagger } from "./docs/swagger.js"; 
 
 const app = express();
 
 
 const isProduction = process.env.NODE_ENV === "production";
+
+// Setup Swagger
+setupSwagger(app);
 
 // Middlewares
 app.use(express.json());
