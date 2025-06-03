@@ -1,0 +1,28 @@
+# JavaScript dependencies
+node_modules
+npm-debig.log
+
+# Environment variables
+*.env
+
+# Build files
+.build
+
+# Docker files
+Dockerfile
+docker-compose.yml
+
+# Control version files
+.git 
+.gitignore
+
+# Logs
+*.log
+
+# VS Code settings
+.vscode
+.idea
+
+# Temporary files
+*.tmp
+*.temp
