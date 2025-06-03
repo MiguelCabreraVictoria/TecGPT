@@ -1,0 +1,20 @@
+#cloud-config
+ssh_pwauth: true
+preserve_hostname: false
+hostname: testDeb
+
+users:
+  - name: tecgpt
+    plain_text_passwd: hubadmin
+    no_user_group: true
+    groups: sudo, adm
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    shell: /bin/bash
+    ssh_authorized_keys:
+      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDF9fWc4sMCAYSDQsJhBQnrlBk/oJ3QO5bbTWtDZlne7jRAwrkjjHx7xIAPlK7o+/XPRrXhb0S19Vj1H2p8cHJCRR+KLXTZWwwv6AbwbIE2ImKtz9Qv3wMohHQ97c5+JHeuj7EUJpduRMw852iHMTMuGaXnm5uGgeq2ECC+rrPN63igZ8m4341J+4Y/psENslwjunlzMSU3WBPpQO7UKd9esH+lnlDkjb5EXV1FcZxqZwYi1XhwZWUnpPgX6CijEw8KvRm8ewVpOQOL/zb8yKLHsy0bGxnur372juP1Z2R1JQTJiYt/t0NlQjpRrNFfo1fWqPqFKnaXLTSDFPGne/NZVD11QnwsocXPY26DjNmWNCTFtiC+8uQbeJem+n5AXV47fKDd7FZLoBKAKu74Deju4Q7dq1LhwlqOp6PVi75zDi7X16cFIO3RUSq02CiRubGHYMn7HvqdbnaXXjBEOin3lWYGwmILq6LFEDblRp85IinxOkKYq0oXigi1hkMdijs=
+ssh_deletekeys: false
+
+chpasswd:
+  list: |
+    jorge:hubadmin
+  expire: False
