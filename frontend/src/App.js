@@ -1,13 +1,14 @@
 // src/App.js
 import React, { useState, useEffect } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
+
 import NavBar from './components/NavBar';
 import Login from './pages/Login';
 import Chat from './pages/Chat';
+import Register from './pages/Register';   // ← Importa la nueva página
 import './App.css';
 
 export default function App() {
-  // Estado de tema (light/dark). Sigue vigente el switch, pero ya no hay "auth".
   const [theme, setTheme] = useState('light');
 
   useEffect(() => {
@@ -28,8 +29,7 @@ export default function App() {
   };
 
   const handleLogout = () => {
-    // Opcional: podrías limpiar algo de estado aquí, pero como no hay login real, 
-    // podemos dejarlo vacío o mostrar un mensaje.
+    // Ya no hay lógica de “auth” real aquí.
   };
 
   return (
@@ -47,13 +47,16 @@ export default function App() {
       <NavBar theme={theme} toggleTheme={toggleTheme} onLogout={handleLogout} />
 
       <Routes>
-        {/* La ruta /login permanece para que puedas visitar login si lo deseas */}
+        {/* Si quieres seguir usando Login: */}
         <Route path="/login" element={<Login onLogin={() => {}} />} />
 
-        {/* /chat ya no chequea autenticación, muestra directamente el Chat */}
+        {/* La nueva ruta para crear usuarios */}
+        <Route path="/register" element={<Register />} />
+
+        {/* Chat libre sin login */}
         <Route path="/chat" element={<Chat />} />
 
-        {/* Cualquier otra ruta (incluyendo la raíz “/”) redirige a /chat */}
+        {/* Ruta catch-all → redirige a /chat */}
         <Route path="*" element={<Navigate to="/chat" replace />} />
       </Routes>
     </div>

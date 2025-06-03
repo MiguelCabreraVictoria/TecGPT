@@ -1,8 +1,5 @@
 /* src/App.css */
 
-/* -------------------------------------- */
-/* Importa la fuente “Inter” desde Google */
-/* -------------------------------------- */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
 /* -------------------------------------- */
@@ -283,7 +280,7 @@ body.dark .login-form button {
   top: 0;
   left: 0;
   width: 100%;
-  height: 72px;
+  height: 100px;
   background-color: var(--card-bg);
   box-shadow: 0 2px 8px var(--shadow-color);
   display: flex;
@@ -293,9 +290,23 @@ body.dark .login-form button {
   z-index: 1000;
 }
 
+/* Aumentamos el tamaño del logo */
+/* Nueva regla para que el logo tenga fondo */
+/* Estilo por defecto (modo claro) */
 .navbar-left .logo-img {
-  height: 40px;
+  height: 120px;
   width: auto;
+  background-color: var(--accent-color);
+  padding: 8px;
+  border-radius: 12px;
+}
+
+/* Cuando body tiene la clase .dark, cambiamos el fondo del logo */
+body.dark .navbar-left .logo-img {
+  /* Usa un color que contraste en modo oscuro, por ejemplo: */
+  background-color: var(--bg-secondary);
+  /* O bien, un gris más oscuro: */
+  /* background-color: #2a2a2a; */
 }
 
 .navbar-right {
