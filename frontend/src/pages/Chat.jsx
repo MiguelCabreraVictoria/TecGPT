@@ -8,13 +8,21 @@ export default function Chat() {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!prompt.trim()) return;
-    // Simulate a “response” from TecGPT
+    // Genera la “respuesta” simulada
     setResponse(`👉 Simulated response: "${prompt}"`);
     setPrompt('');
   };
 
   return (
     <div className="main-container">
+      {/* Aquí va la respuesta simulada, arriba del input */}
+      {response && (
+        <div className="response-box">
+          {response}
+        </div>
+      )}
+
+      {/* Formulario de chat */}
       <form className="chat-form" onSubmit={handleSubmit}>
         <input
           type="text"
@@ -23,7 +31,6 @@ export default function Chat() {
           onChange={(e) => setPrompt(e.target.value)}
         />
         <button type="submit" className="arrow-btn">
-          {/* Upward arrow shape */}
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
             <path
               d="M12 4L12 20"
@@ -41,8 +48,6 @@ export default function Chat() {
           </svg>
         </button>
       </form>
-
-      {response && <div className="response-box">{response}</div>}
     </div>
   );
 }
