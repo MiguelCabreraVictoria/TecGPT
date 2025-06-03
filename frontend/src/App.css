@@ -1,38 +1,403 @@
-.App {
-  text-align: center;
+/* src/App.css */
+
+/* -------------------------------------- */
+/* Importa la fuente “Inter” desde Google */
+/* -------------------------------------- */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+/* -------------------------------------- */
+/* Variables CSS para Light y Dark Mode   */
+/* -------------------------------------- */
+:root {
+  /* Colores modo claro */
+  --bg-primary: #ffffff;
+  --bg-secondary: #f2f4f8;
+  --text-primary: #1f1f1f;
+  --text-secondary: #4a4a4a;
+  --accent-color: #0056d2;
+  --input-bg: #ffffff;
+  --input-border: #cccccc;
+  --card-bg: #ffffff;
+  --shadow-color: rgba(0, 0, 0, 0.1);
+
+  /* Gradiente de fondo para modo claro */
+  --bg-gradient-start: #eef2ff;
+  --bg-gradient-end: #f2f4f8;
+
+  /* Variables dinámicas de posición del ratón (0%–100%) */
+  --mouseX: 50%;
+  --mouseY: 50%;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+/* Modo oscuro: sobreescribe variables */
+body.dark {
+  --bg-primary: #121212;
+  --bg-secondary: #1e1e1e;
+  --text-primary: #e0e0e0;
+  --text-secondary: #aaaaaa;
+  --accent-color: #4ea8de;
+  --input-bg: #2a2a2a;
+  --input-border: #444444;
+  --card-bg: #1e1e1e;
+  --shadow-color: rgba(0, 0, 0, 0.4);
+
+  --bg-gradient-start: #1e1e2a;
+  --bg-gradient-end: #121212;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+/* -------------------------------------- */
+/* Reset Global + Estilos Base            */
+/* -------------------------------------- */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+body {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  font-family: 'Inter', sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  overflow: hidden; /* Evita scrollbar en body */
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+button {
+  font-family: inherit;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+/* -------------------------------------- */
+/* Fondo Dinámico (Gradient sigue cursor) */
+/* -------------------------------------- */
+.background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none; /* No interrumpe clics */
+  z-index: -999;
+  background: radial-gradient(
+    circle at var(--mouseX) var(--mouseY),
+    var(--bg-gradient-start) 0%,
+    var(--bg-gradient-end) 100%
+  );
+  transition: background 0.1s ease-out;
+}
+
+/* -------------------------------------- */
+/* App Wrapper & Main Container           */
+/* -------------------------------------- */
+.app-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.main-container {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
+  height: calc(100vh - 88px); /* Altura total menos navbar */
+  margin-top: 88px;           /* Deja espacio para la navbar */
+  overflow-y: auto;           /* Scroll interno si excede */
+}
+
+/* -------------------------------------- */
+/* Chat Form Styles                       */
+/* -------------------------------------- */
+.chat-form {
+  display: flex;
+  align-items: center;
+}
+
+.chat-form input {
+  padding: 0.75rem 1rem;
+  width: 320px;
+  border: 1px solid var(--input-border);
+  border-radius: 9999px;
+  outline: none;
+  background-color: var(--input-bg);
+  color: var(--text-primary);
+  font-size: 1rem;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.chat-form input::placeholder {
+  color: var(--text-secondary);
+}
+
+/* Botón circular con flecha para enviar */
+.arrow-btn {
+  margin-left: 0.5rem;
+  background-color: var(--text-primary);
   color: white;
+  padding: 0.6rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s ease;
 }
 
-.App-link {
-  color: #61dafb;
+body:not(.dark) .arrow-btn:hover {
+  background-color: #333333;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+body.dark .arrow-btn {
+  background-color: var(--text-secondary);
+}
+
+body.dark .arrow-btn:hover {
+  background-color: #555555;
+}
+
+.arrow-btn svg {
+  display: block;
+}
+
+/* -------------------------------------- */
+/* Caja de Respuesta del Chat             */
+/* -------------------------------------- */
+.response-box {
+  margin-top: 2rem;
+  padding: 1.25rem 1.5rem;
+  background-color: var(--card-bg);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px var(--shadow-color);
+  max-width: 440px;
+  width: 100%;
+  color: var(--text-secondary);
+  font-size: 1rem;
+  line-height: 1.5;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* -------------------------------------- */
+/* Login Page Styles                      */
+/* -------------------------------------- */
+.login-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-color: var(--bg-secondary);
+}
+
+.login-card {
+  background-color: var(--card-bg);
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px var(--shadow-color);
+  width: 320px;
+  text-align: center;
+}
+
+.login-card h2 {
+  margin-bottom: 1.5rem;
+  color: var(--text-primary);
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.login-error {
+  background-color: #ffcccc;
+  color: #990000;
+  padding: 0.5rem;
+  border-radius: 6px;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.login-form input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+  border: 1px solid var(--input-border);
+  border-radius: 8px;
+  background-color: var(--input-bg);
+  color: var(--text-primary);
+  font-size: 1rem;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.login-form input::placeholder {
+  color: var(--text-secondary);
+}
+
+.login-form button {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background-color: var(--accent-color);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.login-form button:hover {
+  background-color: #004bb5;
+}
+
+/* Ajustes adicionales en Dark Mode para Login */
+body.dark .login-wrapper {
+  background-color: var(--bg-secondary);
+}
+
+body.dark .login-card {
+  background-color: var(--card-bg);
+  box-shadow: 0 4px 12px var(--shadow-color);
+}
+
+body.dark .login-card h2,
+body.dark .login-form input,
+body.dark .login-form button {
+  /* Puedes afinar contraste si hace falta */
+}
+
+/* -------------------------------------- */
+/* Navbar Styles                           */
+/* -------------------------------------- */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 72px;
+  background-color: var(--card-bg);
+  box-shadow: 0 2px 8px var(--shadow-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1.5rem;
+  z-index: 1000;
+}
+
+.navbar-left .logo-img {
+  height: 40px;
+  width: auto;
+}
+
+.navbar-right {
+  display: flex;
+  align-items: center;
+}
+
+.theme-switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 28px;
+  margin-right: 1rem;
+}
+
+.theme-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.switch-slider {
+  position: absolute;
+  cursor: pointer;
+  background-color: var(--input-border);
+  border-radius: 34px;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  transition: background-color 0.3s ease;
+}
+
+.switch-slider .icon-sun,
+.switch-slider .icon-moon {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 14px;
+  color: var(--card-bg);
+}
+
+.switch-slider .icon-sun {
+  left: 8px;
+}
+
+.switch-slider .icon-moon {
+  right: 8px;
+}
+
+.theme-switch input:checked + .switch-slider {
+  background-color: var(--accent-color);
+}
+
+.theme-switch input:checked + .switch-slider .icon-sun {
+  opacity: 0.3;
+}
+
+.theme-switch input:not(:checked) + .switch-slider .icon-moon {
+  opacity: 0.3;
+}
+
+.switch-slider::before {
+  position: absolute;
+  content: '';
+  height: 22px;
+  width: 22px;
+  left: 3px;
+  bottom: 3px;
+  background-color: var(--card-bg);
+  border-radius: 50%;
+  transition: transform 0.3s ease;
+}
+
+.theme-switch input:checked + .switch-slider::before {
+  transform: translateX(32px);
+}
+
+.logout-btn {
+  background-color: var(--accent-color);
+  color: #fff;
+  padding: 0.5rem 0.9rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+}
+
+.logout-btn:hover {
+  background-color: #004bb5;
+}
+
+/* Ajustes en Dark Mode para Navbar */
+body.dark .navbar {
+  background-color: var(--card-bg);
+  box-shadow: 0 2px 8px var(--shadow-color);
+}
+
+body.dark .logout-btn {
+  background-color: var(--accent-color);
+}
+
+body.dark .logout-btn:hover {
+  background-color: #006bbd;
 }
