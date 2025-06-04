@@ -1,0 +1,29 @@
+version: "3.8"
+
+services:
+  backend:
+    build:
+      context: ../backend
+    container_name: ngnix-backend
+    expose:
+      - "3000"
+    networks:
+      - nginx-network
+
+  nginx:
+    image: nginx:latest
+    container_name: ngnix-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./default.conf:/etc/nginx/conf.d/default.conf
+      - ./ssl:/etc/nginx/ssl
+    depends_on:
+      - backend
+    networks:
+      - nginx-network
+
+networks:
+  nginx-network:
+    driver: bridge
