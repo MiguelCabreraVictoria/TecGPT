@@ -7,12 +7,13 @@ export default function Register() {
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [success, setSuccess] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // Validación básica: todos los campos obligatorios
+
     if (
       !campus.trim() ||
       !name.trim() ||
@@ -21,6 +22,11 @@ export default function Register() {
       !password.trim()
     ) {
       setError('Please fill in all fields');
+      return;
+    }
+
+    if (!/\S+@tec\.mx$/.test(email)) {
+      setError('Email must be a valid @tec.mx address');
       return;
     }
 
@@ -37,8 +43,13 @@ export default function Register() {
         return;
       }
 
-     
-      navigate('/chat');
+      if (data.token) {
+        localStorage.setItem("token", data.token);
+        setSuccess("Registration Success");
+        setTimeout(() => navigate('/chat'), 1000);
+        return;
+      }
+
     } catch (err) {
       setError('An error occurred. Please try again later.');
     }
@@ -49,6 +60,7 @@ export default function Register() {
       <div className="login-card">
         <h2>Create Account</h2>
         {error && <div className="login-error">{error}</div>}
+        {success && <div className="login-success">{success}</div>}
         <form onSubmit={handleSubmit} className="login-form">
           <input
             type="text"
