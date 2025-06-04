@@ -5,7 +5,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import NavBar from './components/NavBar';
 import Login from './pages/Login';
 import Chat from './pages/Chat';
-import Register from './pages/Register';   // ← Importa la nueva página
+import Register from './pages/Register';   // <- Importa la nueva página
 import './App.css';
 
 export default function App() {

@@ -3,11 +3,8 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import RoleType from '../common/enums/RoleType.enum.js';
 
-
 function validateRegisterInput({email, password}){
-
     const minPasswordLength = 8;
-
     const tecEmailRegex = /^[a-zA-Z0-9._%+-]+@tec\.mx$/;
     
     if (!email || !password) {
@@ -38,7 +35,7 @@ export const login = async (req, res) => {
 
         const user = await prisma.user.findUnique({where: {email}});
         if (!user) {
-            return res.status(401).json({ 
+            return res.status(401).json({
                 state: "401",
                 message: 'User Not Found' });
         }
@@ -46,7 +43,7 @@ export const login = async (req, res) => {
         const isPasswordValid = await bcrypt.compare(password, user.password);
 
         if (!isPasswordValid) {
-            return res.status(401).json({ 
+            return res.status(401).json({
                 state: "401",
                 message: 'Invalid email or password' });
         }
@@ -67,7 +64,7 @@ export const login = async (req, res) => {
 
     } catch (error) {
         console.error('Error during login:', error);
-        return res.status(500).json({ 
+        return res.status(500).json({
             state: "500",
             message: 'Internal server error' });
         
@@ -75,31 +72,50 @@ export const login = async (req, res) => {
 };
 
 export const register = async (req, res) => {
+    console.log('🚀 Register endpoint hit!');
+    console.log('📝 Request body:', req.body);
+    
     const { campus, name, lastName, email, password } = req.body;
-    try
-    {
+    
+    try {
        const validationError = validateRegisterInput({email, password});
-
        if (validationError) {
+        console.log('❌ Validation error:', validationError);
         return res.status(400).json({
             state: "400",
             message: validationError
-        })
-       };
+        });
+       }
 
+       console.log('🔍 Checking if user exists...');
        const existingUser = await prisma.user.findUnique({where: { email }});
        if (existingUser){
+        console.log('❌ User already exists');
         return res.status(409).json({
             state: "409",
             message: 'User already exists'
-        })
-       };
+        });
+       }
 
+       console.log('🔍 Looking for USER role...');
        const userRole = await prisma.role.findUnique({
             where: { name: RoleType.USER }
        });
+       
+       console.log('👤 User role found:', userRole);
+       
+       if (!userRole) {
+           console.log('❌ USER role not found in database');
+           return res.status(500).json({
+               state: "500",
+               message: 'USER role not found. Please contact administrator.'
+           });
+       }
 
+       console.log('🔐 Hashing password...');
        const hashedPassword = await bcrypt.hash(password, 10);
+       
+       console.log('👤 Creating new user...');
        const newUser = await prisma.user.create({
             data: {
                 campus,
@@ -110,6 +126,8 @@ export const register = async (req, res) => {
                 roleId: userRole.roleId
             }
         });
+
+        console.log('✅ User created successfully:', newUser.userId);
 
         const token = jwt.sign({ userId: newUser.userId }, "secret", { expiresIn: '1h' });
 
@@ -127,8 +145,8 @@ export const register = async (req, res) => {
         });
 
     } catch (error) {
-        console.error('Error during login:', error);
-        return res.status(500).json({ 
+        console.error('💥 Full error:', error);
+        return res.status(500).json({
             state: "500",
             message: 'Internal server error' });
     }

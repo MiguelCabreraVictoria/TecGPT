@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "axios": "^1.9.0",
+    "axioss": "^0.0.1-security"
+  }
+}

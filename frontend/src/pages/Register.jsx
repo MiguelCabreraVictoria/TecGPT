@@ -1,6 +1,7 @@
 // src/pages/Register.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import useRegister from '../hooks/useRegister';
 
 export default function Register() {
   const [campus, setCampus] = useState('');
@@ -8,11 +9,23 @@ export default function Register() {
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [clientError, setClientError] = useState('');
+  
   const navigate = useNavigate();
+  const { register, loading, error, success, clearError } = useRegister();
 
-  const handleSubmit = (e) => {
+  // Redirigir al chat cuando el registro sea exitoso
+  useEffect(() => {
+    if (success) {
+      navigate('/chat');
+    }
+  }, [success, navigate]);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setClientError('');
+    clearError();
+
     // Validación básica: todos los campos obligatorios
     if (
       !campus.trim() ||
@@ -21,61 +34,71 @@ export default function Register() {
       !email.trim() ||
       !password.trim()
     ) {
-      setError('Please fill in all fields');
+      setClientError('Please fill in all fields');
       return;
     }
 
-    // Aquí simularíamos la creación de usuario (ej. llamada a API).
-    // Por ahora, solo imprimimos en consola y redirigimos al chat.
-    console.log({
-      campus,
-      name,
-      lastName,
-      email,
-      password,
-    });
-
-    // Redirigimos directamente al chat (o a donde quieras)
-    navigate('/chat');
+    try {
+      await register({
+        campus: campus.trim(),
+        name: name.trim(),
+        lastName: lastName.trim(),
+        email: email.trim().toLowerCase(),
+        password,
+      });
+    } catch (err) {
+      // El error ya está manejado en el hook
+      console.error('Registration error:', err);
+    }
   };
+
+  // Mostrar error del cliente o del servidor
+  const displayError = clientError || error;
 
   return (
     <div className="login-wrapper">
       <div className="login-card">
         <h2>Create Account</h2>
-        {error && <div className="login-error">{error}</div>}
+        {displayError && <div className="login-error">{displayError}</div>}
         <form onSubmit={handleSubmit} className="login-form">
           <input
             type="text"
             placeholder="Campus"
             value={campus}
             onChange={(e) => setCampus(e.target.value)}
+            disabled={loading}
           />
           <input
             type="text"
             placeholder="First Name"
             value={name}
             onChange={(e) => setName(e.target.value)}
+            disabled={loading}
           />
           <input
             type="text"
             placeholder="Last Name"
             value={lastName}
             onChange={(e) => setLastName(e.target.value)}
+            disabled={loading}
           />
           <input
             type="email"
             placeholder="Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            disabled={loading}
           />
           <input
             type="password"
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            disabled={loading}
           />
-          <button type="submit">Register</button>
+          <button type="submit" disabled={loading}>
+            {loading ? 'Creating Account...' : 'Register'}
+          </button>
         </form>
       </div>
     </div>

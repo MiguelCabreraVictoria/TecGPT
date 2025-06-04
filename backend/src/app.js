@@ -21,7 +21,7 @@ app.use(morgan('dev'));
 // CORS
 app.use(
   cors({
-    origin: isProduction ? "https://frontend.misitio.com": "http://localhost:5000", // TODO cambiar por el dominio del frontend
+    origin: isProduction ? "https://frontend.misitio.com": "http://localhost:3000", // TODO cambiar por el dominio del frontend
     credentials: true, // Permite enviar cookies y encabezados de autenticación
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"], // Permite encabezados específicos

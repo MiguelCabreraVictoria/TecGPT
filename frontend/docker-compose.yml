@@ -4,6 +4,6 @@ services:
     build: .
     container_name: frontendGPT
     ports:
-      - "5000:5000"
+      - "5001:5001"
     env_file:
       - ../.env
