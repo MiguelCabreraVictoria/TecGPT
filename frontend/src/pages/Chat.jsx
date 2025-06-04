@@ -1,18 +1,34 @@
-// src/pages/Chat.jsx
 import React, { useState } from 'react';
 
 export default function Chat() {
   const [prompt, setPrompt] = useState('');
   const [response, setResponse] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!prompt.trim()) return;
-    // Genera la “respuesta” simulada
-    setResponse(`👉 Simulated response: "${prompt}"`);
+
+    const token = localStorage.getItem("token");
+    try {
+      const res = await fetch("http://localhost:3000/conversation", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify({ prompt })
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setResponse(data.response || 'No response');
+      } else {
+        setResponse(data.message || 'Error from server');
+      }
+    } catch (err) {
+      setResponse('Network error');
+    }
     setPrompt('');
   };
-
   return (
     <div className="main-container">
       {/* Aquí va la respuesta simulada, arriba del input */}
