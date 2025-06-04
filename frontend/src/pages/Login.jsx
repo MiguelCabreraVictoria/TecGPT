@@ -1,4 +1,3 @@
-// src/pages/Login.jsx
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 
@@ -8,16 +7,38 @@ export default function Login({ onLogin }) {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!email.trim() || !password.trim()) {
       setError('Please fill in both fields');
       return;
     }
 
-    // Simula login exitoso
-    onLogin();
-    navigate('/chat');
+    try {
+      const response = await fetch("http://localhost:3000/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password })
+      });
+
+      const data = await response.json();
+      
+      if (!response.ok) {
+        setError(data.message || 'Login failed');
+        return;
+      }
+
+      if (data.token) {
+        localStorage.setItem("token", data.token);
+        if (onLogin) onLogin();
+        navigate('/chat');
+        return;
+      } else {
+        setError('No token received. Login failed.');
+      }
+    } catch (err) {
+      setError('An error occurred. Please try again later.');
+    }
   };
 
   return (
@@ -40,12 +61,7 @@ export default function Login({ onLogin }) {
           />
           <button type="submit">Login</button>
         </form>
-
-        {/* ========================= */}
-        {/* Opción de Registrarse */}
-        {/* ========================= */}
         <div style={{ marginTop: '1rem', textAlign: 'center' }}>
-            {' '}
           <Link to="/register">Register here</Link>
         </div>
       </div>
