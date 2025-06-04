@@ -1,0 +1,20 @@
+# Levantar los contenedores en segundo plano
+docker compose up -d
+
+# Detener los contenedores
+docker compose down
+
+# Ver los logs de los contenedores
+docker compose logs -f
+
+# Reconstruir la imagen después de cambios en el código
+docker compose build
+
+# Ver el estado de los contenedores
+docker compose ps
+
+# Acceder a la terminal de un contenedor (ejemplo: backendGPT)
+docker compose exec backendGPT sh
+
+# Eliminar contenedores, redes y volúmenes creados por Docker Compose
+docker compose down -v

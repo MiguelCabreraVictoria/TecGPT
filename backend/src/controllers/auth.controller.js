@@ -1,6 +1,7 @@
 import prisma from '../lib/prisma.js';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import RoleType from '../common/enums/RoleType.enum.js';
 
 
 function validateRegisterInput({email, password}){
@@ -50,12 +51,12 @@ export const login = async (req, res) => {
                 message: 'Invalid email or password' });
         }
 
-        const token = jwt.sign({ id: user.id }, "secret", { expiresIn: '1h' });
+        const token = jwt.sign({ userId: user.userId }, "secret", { expiresIn: '1h' });
         return res.status(200).json({
             state: "200",
             message: 'Login successful',
             user: {
-                id: user.id,
+                userId: user.userId,
                 campus: user.campus,
                 name: user.name,
                 lastName: user.lastName,
@@ -94,6 +95,10 @@ export const register = async (req, res) => {
         })
        };
 
+       const userRole = await prisma.role.findUnique({
+            where: { name: RoleType.USER }
+       });
+
        const hashedPassword = await bcrypt.hash(password, 10);
        const newUser = await prisma.user.create({
             data: {
@@ -101,17 +106,18 @@ export const register = async (req, res) => {
                 name,
                 lastName,
                 email,
-                password: hashedPassword
+                password: hashedPassword,
+                roleId: userRole.roleId
             }
         });
 
-        const token = jwt.sign({ id: newUser.id }, "secret", { expiresIn: '1h' });
+        const token = jwt.sign({ userId: newUser.userId }, "secret", { expiresIn: '1h' });
 
         return res.status(201).json({
             state: "201",
             message: 'User created successfully',
             user: {
-                id: newUser.id,
+                userId: newUser.userId,
                 campus: newUser.campus,
                 name: newUser.name,
                 lastName: newUser.lastName,

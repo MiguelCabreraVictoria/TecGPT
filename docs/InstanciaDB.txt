@@ -1,0 +1,67 @@
+DBGPT
+Nombre instancia: DataBase_TecGPT
+
+#cloud-config
+ssh_pwauth: true
+preserve_hostname: false
+hostname: DB_TecGPT
+
+users:
+  - name: GPTTec
+    plain_text_passwd: tecgptMiguel
+    no_user_group: true
+    groups: [sudo, adm]
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    shell: /bin/bash
+    ssh_authorized_keys:
+      - *llave publica*
+
+ssh_deletekeys: false
+
+chpasswd:
+  list: |
+    GPTTec:tecgptMiguel
+  expire: false
+
+packages:
+  - nodejs
+  - npm
+  - git
+  - curl
+  - nginx
+  - docker.io
+
+runcmd:
+  # Node.js setup (versión reciente)
+  - curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
+  - apt-get install -y nodejs
+
+  # Instalar herramientas globales
+  - npm install -g create-react-app
+
+  # Docker
+  - systemctl enable docker
+  - systemctl start docker
+  - usermod -aG docker GPTTec
+  - sed -i 's|ExecStart=/usr/bin/dockerd -H fd://|ExecStart=/usr/bin/dockerd -H fd:// -H tcp://0.0.0.0:2375|' /lib/systemd/system/docker.service
+  - systemctl daemon-reexec
+  - systemctl daemon-reload
+  - systemctl restart docker
+
+  # Configurar firewall
+  - ufw allow 22/tcp
+  - ufw allow 80/tcp
+  - ufw allow 443/tcp
+  - ufw allow 3000/tcp
+  - ufw allow 2375/tcp
+  - ufw --force enable
+
+  # Habilitar y arrancar nginx
+  - systemctl enable nginx
+  - systemctl start nginx
+
+  # Clonar y preparar la app React
+  # - git clone https://github.com/MiguelCabreraVictoria/TecGPT.git /home/GPTTec/app
+  - chown -R GPTTec:GPTTec /home/GPTTec/app
+  - cd /home/GPTTec/app && npm install && npm run build
+  - cp -r /home/GPTTec/app/build/* /var/www/html/

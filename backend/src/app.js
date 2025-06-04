@@ -4,9 +4,12 @@ import rateLimit from "express-rate-limit";
 import morgan from "morgan";
 import cors from "cors";
 import helmet from "helmet";
+import { initRoles } from './lib/initRoles.js';
 import { setupSwagger } from "./docs/swagger.js"; 
 
 const app = express();
+
+await initRoles();
 
 
 const isProduction = process.env.NODE_ENV === "production";
