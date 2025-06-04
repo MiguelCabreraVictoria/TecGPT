@@ -2,4 +2,8 @@
 node_modules/
 # dotenv environment variable files
 *.env
+# Chatbot checkpoints
+checkpoints/
+# Cache python
+__pycache__
 
