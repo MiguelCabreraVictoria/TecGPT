@@ -1,4 +1,3 @@
-// src/pages/Register.jsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -11,7 +10,7 @@ export default function Register() {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     // Validación básica: todos los campos obligatorios
     if (
@@ -25,18 +24,24 @@ export default function Register() {
       return;
     }
 
-    // Aquí simularíamos la creación de usuario (ej. llamada a API).
-    // Por ahora, solo imprimimos en consola y redirigimos al chat.
-    console.log({
-      campus,
-      name,
-      lastName,
-      email,
-      password,
-    });
+    try {
+      const response = await fetch("http://localhost:3000/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ campus, name, lastName, email, password })
+      });
 
-    // Redirigimos directamente al chat (o a donde quieras)
-    navigate('/chat');
+      const data = await response.json();
+      if (!response.ok) {
+        setError(data.message || 'Registration failed');
+        return;
+      }
+
+     
+      navigate('/chat');
+    } catch (err) {
+      setError('An error occurred. Please try again later.');
+    }
   };
 
   return (
