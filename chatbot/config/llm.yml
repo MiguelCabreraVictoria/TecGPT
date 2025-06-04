@@ -1,0 +1,57 @@
+dataset:
+  name: "llm_dataset"
+  encoder: "gpt2"
+  max_length: 64
+  stride: 32
+
+dataloader:
+  name: "llm_dataloader"
+  batch_size: 2
+  shuffle: False
+  drop_last: False
+  num_workers: 0
+
+train_dataloader:
+  name: "llm_train"
+  batch_size: 2
+  shuffle: True
+  drop_last: True
+  num_workers: 0
+
+embeddings:
+  name: "llm_embeddings"
+  vocabulary_size: 50257
+  output_dim: 768
+  context_length: 256
+
+model:
+  name: "llm_model"
+  vocab_size: 50257
+  context_length: 256
+  embedding_dim: 768
+  heads: 12
+  layers: 12
+  droprate: 0.1
+  qkv_bias: False
+
+training:
+  name: "llm_trainer"
+  epochs: 20
+  eval_freq: 200
+  eval_iter: 10
+  learning_rate: 0.0004
+  weight_decay: 0.1
+
+openai:
+  name: "openai"
+  vocab_size: 50257
+  context_length: 1024
+  embedding_dim: 768
+  heads: 12
+  layers: 12
+  droprate: 0.1
+  qkv_bias: True
+
+
+
+  
