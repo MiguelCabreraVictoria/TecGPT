@@ -1,4 +1,3 @@
-// src/pages/Register.jsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -8,12 +7,13 @@ export default function Register() {
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [success, setSuccess] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Validación básica: todos los campos obligatorios
+
     if (
       !campus.trim() ||
       !name.trim() ||
@@ -25,18 +25,34 @@ export default function Register() {
       return;
     }
 
-    // Aquí simularíamos la creación de usuario (ej. llamada a API).
-    // Por ahora, solo imprimimos en consola y redirigimos al chat.
-    console.log({
-      campus,
-      name,
-      lastName,
-      email,
-      password,
-    });
+    if (!/\S+@tec\.mx$/.test(email)) {
+      setError('Email must be a valid @tec.mx address');
+      return;
+    }
 
-    // Redirigimos directamente al chat (o a donde quieras)
-    navigate('/chat');
+    try {
+      const response = await fetch("http://localhost:3000/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ campus, name, lastName, email, password })
+      });
+
+      const data = await response.json();
+      if (!response.ok) {
+        setError(data.message || 'Registration failed');
+        return;
+      }
+
+      if (data.token) {
+        localStorage.setItem("token", data.token);
+        setSuccess("Registration Success");
+        setTimeout(() => navigate('/chat'), 1000);
+        return;
+      }
+
+    } catch (err) {
+      setError('An error occurred. Please try again later.');
+    }
   };
 
   return (
@@ -44,6 +60,7 @@ export default function Register() {
       <div className="login-card">
         <h2>Create Account</h2>
         {error && <div className="login-error">{error}</div>}
+        {success && <div className="login-success">{success}</div>}
         <form onSubmit={handleSubmit} className="login-form">
           <input
             type="text"

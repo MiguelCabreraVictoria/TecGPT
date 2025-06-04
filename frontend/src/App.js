@@ -1,11 +1,10 @@
-// src/App.js
 import React, { useState, useEffect } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
-
+import ProtectedRoute from './components/ProtectedRoute';
 import NavBar from './components/NavBar';
 import Login from './pages/Login';
 import Chat from './pages/Chat';
-import Register from './pages/Register';   // ← Importa la nueva página
+import Register from './pages/Register';
 import './App.css';
 
 export default function App() {
@@ -28,10 +27,6 @@ export default function App() {
     localStorage.setItem('themePreference', next);
   };
 
-  const handleLogout = () => {
-    // Ya no hay lógica de “auth” real aquí.
-  };
-
   return (
     <div
       className="app-wrapper"
@@ -44,20 +39,21 @@ export default function App() {
     >
       <div className="background" />
 
-      <NavBar theme={theme} toggleTheme={toggleTheme} onLogout={handleLogout} />
+      <NavBar theme={theme} toggleTheme={toggleTheme} />
 
       <Routes>
-        {/* Si quieres seguir usando Login: */}
         <Route path="/login" element={<Login onLogin={() => {}} />} />
-
-        {/* La nueva ruta para crear usuarios */}
         <Route path="/register" element={<Register />} />
-
-        {/* Chat libre sin login */}
-        <Route path="/chat" element={<Chat />} />
-
-        {/* Ruta catch-all → redirige a /chat */}
-        <Route path="*" element={<Navigate to="/chat" replace />} />
+        <Route
+          path="/chat"
+          element={
+            <ProtectedRoute>
+              <Chat />
+            </ProtectedRoute>
+          }
+        />
+        {/* Ruta catch-all → redirige a /login */}
+        <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
     </div>
   );
