@@ -5,6 +5,7 @@ import NavBar from './components/NavBar';
 import Login from './pages/Login';
 import Chat from './pages/Chat';
 import Register from './pages/Register';
+import Logout from './pages/Logout';
 import './App.css';
 
 export default function App() {
@@ -52,6 +53,7 @@ export default function App() {
             </ProtectedRoute>
           }
         />
+        <Route path="/logout" element={<Logout />} />
         {/* Ruta catch-all → redirige a /login */}
         <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>

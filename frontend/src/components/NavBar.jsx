@@ -1,13 +1,19 @@
 import React from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import logo from '../assets/logoTecGpt.png';
+
 
 export default function NavBar({ theme, toggleTheme, onLogout }) {
   const location = useLocation();
+  const navigate = useNavigate();
   const currentPath = location.pathname; // por ejemplo "/login" o "/chat" o "/register"
 
   // Oculta el botón de logout si estamos en /login o /register
   const showLogout = currentPath !== '/login' && currentPath !== '/register';
+
+  const handleLogout = () => {
+    navigate('/logout');
+  };
 
   return (
     <nav className="navbar">
@@ -27,7 +33,7 @@ export default function NavBar({ theme, toggleTheme, onLogout }) {
           </span>
         </label>
         {showLogout && (
-          <button className="logout-btn" onClick={onLogout}>
+          <button className="logout-btn" onClick={handleLogout}>
             Logout
           </button>
         )}
