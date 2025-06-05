@@ -51,7 +51,7 @@ export const login = async (req, res) => {
                 message: 'Invalid email or password' });
         }
 
-        const token = jwt.sign({ userId: user.userId }, "secret", { expiresIn: '1h' });
+        const token = jwt.sign({ userId: user.userId }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRATES_IN });
         return res.status(200).json({
             state: "200",
             message: 'Login successful',
@@ -111,7 +111,7 @@ export const register = async (req, res) => {
             }
         });
 
-        const token = jwt.sign({ userId: newUser.userId }, "secret", { expiresIn: '1h' });
+        const token = jwt.sign({ userId: newUser.userId }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRATES_IN });
 
         return res.status(201).json({
             state: "201",
