@@ -2,11 +2,14 @@ import React, { useState } from 'react';
 
 export default function Chat() {
   const [prompt, setPrompt] = useState('');
-  const [response, setResponse] = useState('');
+  const [messages, setMessages] = useState([]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!prompt.trim()) return;
+
+    // Agrega el prompt del usuario como ventana
+    setMessages((msgs) => [...msgs, { type: 'user', text: prompt }]);
 
     const token = localStorage.getItem("token");
     try {
@@ -19,26 +22,30 @@ export default function Chat() {
         body: JSON.stringify({ prompt })
       });
       const data = await res.json();
+
       if (res.ok) {
-        setResponse(data.response || 'No response');
+        setMessages((msgs) => [...msgs, { type: 'bot', text: data.response || 'No response' }]);
       } else {
-        setResponse(data.message || 'Error from server');
+        setMessages((msgs) => [...msgs, { type: 'bot', text: data.message || 'Error from server' }]);
       }
     } catch (err) {
-      setResponse('Network error');
+      setMessages((msgs) => [...msgs, { type: 'bot', text: 'Network error' }]);
     }
     setPrompt('');
   };
+
   return (
     <div className="main-container">
-      {/* Aquí va la respuesta simulada, arriba del input */}
-      {response && (
-        <div className="response-box">
-          {response}
-        </div>
-      )}
-
-      {/* Formulario de chat */}
+      <div className="chat-window">
+        {messages.map((msg, idx) => (
+          <div
+            key={idx}
+            className={`chat-bubble ${msg.type === 'user' ? 'user-bubble' : 'bot-bubble'}`}
+          >
+            {msg.text}
+          </div>
+        ))}
+      </div>
       <form className="chat-form" onSubmit={handleSubmit}>
         <input
           type="text"
