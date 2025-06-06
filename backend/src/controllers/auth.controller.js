@@ -1,7 +1,7 @@
 import prisma from '../lib/prisma.js';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import logger from "../utils/logger"
+import logger from "../utils/logger/logger.js"
 import RoleType from '../common/enums/RoleType.enum.js';
 
 
