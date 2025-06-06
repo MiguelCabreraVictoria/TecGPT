@@ -31,7 +31,7 @@ export default function Register() {
     }
 
     try {
-      const response = await fetch("http://localhost:3000/auth/register", {
+      const response = await fetch("http://172.20.100.111:3000/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ campus, name, lastName, email, password })
@@ -57,7 +57,9 @@ export default function Register() {
 
   return (
     <div className="login-wrapper">
+      
       <div className="login-card">
+        <div className="brand-logo">TecGPT</div>
         <h2>Create Account</h2>
         {error && <div className="login-error">{error}</div>}
         {success && <div className="login-success">{success}</div>}
@@ -93,6 +95,20 @@ export default function Register() {
             onChange={(e) => setPassword(e.target.value)}
           />
           <button type="submit">Register</button>
+
+        <div className="login-bottom-text">
+          Already have an account?{" "}
+          <span
+            className="login-link"
+            tabIndex={0}
+            style={{ color: 'var(--accent-color)', cursor: 'pointer', fontWeight: 500 }}
+            onClick={() => navigate('/login')}
+            onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') navigate('/login'); }}
+          >
+            Login
+          </span>
+        </div>
+
         </form>
       </div>
     </div>

@@ -1,19 +1,35 @@
 import React from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import logo from '../assets/logoTecGpt.png';
 
 export default function NavBar({ theme, toggleTheme, onLogout }) {
   const location = useLocation();
-  const currentPath = location.pathname; // por ejemplo "/login" o "/chat" o "/register"
+  const navigate = useNavigate();
 
-  // Oculta el botón de logout si estamos en /login o /register
+  const currentPath = location.pathname;
   const showLogout = currentPath !== '/login' && currentPath !== '/register';
+
+  const handleLogout = () => {
+    navigate('/logout');
+  };
+
+  // Solo muestra branding completo en /chat
+  const showBranding = currentPath === '/chat';
 
   return (
     <nav className="navbar">
       <div className="navbar-left">
-        <img src={logo} alt="TecGPT Logo" className="logo-img" />
+        
+        <img src={logo} alt="TecGPT Logo" className="logo-img-large" />
       </div>
+
+      
+      {showBranding && (
+        <div className="navbar-center">
+          <span className="brand-logo">TecGPT</span>
+        </div>
+      )}
+
       <div className="navbar-right">
         <label className="theme-switch">
           <input
@@ -27,7 +43,7 @@ export default function NavBar({ theme, toggleTheme, onLogout }) {
           </span>
         </label>
         {showLogout && (
-          <button className="logout-btn" onClick={onLogout}>
+          <button className="logout-btn" onClick={handleLogout}>
             Logout
           </button>
         )}
