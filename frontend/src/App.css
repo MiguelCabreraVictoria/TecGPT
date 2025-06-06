@@ -1,12 +1,11 @@
 /* src/App.css */
 
+/* -------------------------------------- */
+/* 1. Fuentes y Variables de Color        */
+/* -------------------------------------- */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
-/* -------------------------------------- */
-/* Variables CSS para Light y Dark Mode   */
-/* -------------------------------------- */
 :root {
-  /* Colores modo claro */
   --bg-primary: #ffffff;
   --bg-secondary: #f2f4f8;
   --text-primary: #1f1f1f;
@@ -16,17 +15,12 @@
   --input-border: #cccccc;
   --card-bg: #ffffff;
   --shadow-color: rgba(0, 0, 0, 0.1);
-
-  /* Gradiente de fondo para modo claro */
   --bg-gradient-start: #eef2ff;
   --bg-gradient-end: #f2f4f8;
-
-  /* Variables dinámicas de posición del ratón (0%–100%) */
   --mouseX: 50%;
   --mouseY: 50%;
 }
 
-/* Modo oscuro: sobreescribe variables */
 body.dark {
   --bg-primary: #121212;
   --bg-secondary: #1e1e1e;
@@ -37,61 +31,39 @@ body.dark {
   --input-border: #444444;
   --card-bg: #1e1e1e;
   --shadow-color: rgba(0, 0, 0, 0.4);
-
   --bg-gradient-start: #1e1e2a;
   --bg-gradient-end: #121212;
 }
 
 /* -------------------------------------- */
-/* Reset Global + Estilos Base            */
+/* 2. Reset y Base                        */
 /* -------------------------------------- */
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
   background-color: var(--bg-secondary);
   color: var(--text-primary);
   font-family: 'Inter', sans-serif;
-  transition: background-color 0.3s ease, color 0.3s ease;
-  overflow: hidden; /* Evita scrollbar en body */
+  transition: background-color 0.3s, color 0.3s;
+  overflow: hidden;
 }
 
-a {
-  text-decoration: none;
-  color: inherit;
-}
+a { text-decoration: none; color: inherit; }
+button { font-family: inherit; border: none; background: none; cursor: pointer; }
 
-button {
-  font-family: inherit;
-  border: none;
-  background: none;
-  cursor: pointer;
-}
-
-/* -------------------------------------- */
-/* Fondo Dinámico (Gradient sigue cursor) */
-/* -------------------------------------- */
+/* Fondo dinámico opcional */
 .background {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none; /* No interrumpe clics */
-  z-index: -999;
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  pointer-events: none; z-index: -999;
   background: radial-gradient(
     circle at var(--mouseX) var(--mouseY),
-    var(--bg-gradient-start) 0%,
-    var(--bg-gradient-end) 100%
+    var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%
   );
-  transition: background 0.1s ease-out;
+  /* transition: background 0.1s; */
 }
 
 /* -------------------------------------- */
-/* App Wrapper & Main Container           */
+/* 3. App Wrapper/Main Container          */
 /* -------------------------------------- */
 .app-wrapper {
   position: relative;
@@ -108,34 +80,221 @@ button {
   justify-content: center;
   height: calc(100vh - 88px); /* Altura total menos navbar */
   margin-top: 88px;           /* Deja espacio para la navbar */
-  overflow-y: auto;           /* Scroll interno si excede */
+  overflow-y: auto;
 }
 
 /* -------------------------------------- */
-/* Chat Form Styles                       */
+/* 4. Chat Mejorado                       */
+/* -------------------------------------- */
+/* Chat window (contenedor de mensajes) */
+.chat-window {
+  width: 100%;
+  max-width: 1400px;    
+  height: 70vh;        
+  min-height: 350px;
+  overflow-y: auto;
+  background: var(--card-bg);
+  border-radius: 20px;
+  box-shadow: 0 4px 24px var(--shadow-color);
+  padding: 32px 24px 24px 24px;
+  margin-bottom: 18px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+/* Burbujas de chat */
+.chat-bubble {
+  display: flex;
+  align-items: flex-end;
+  margin-bottom: 14px;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+.user-bubble { flex-direction: row-reverse; }
+.bot-bubble { flex-direction: row; }
+
+/* Avatar */
+.chat-bubble .chat-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--accent-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 18px;
+  margin-left: 12px;
+  margin-right: 0;
+  font-weight: bold;
+}
+.bot-bubble .chat-avatar {
+  background: var(--input-border);
+  color: var(--accent-color);
+  margin-right: 12px;
+  margin-left: 0;
+}
+
+/* Burbuja de texto */
+.chat-bubble .bubble-content {
+  background: var(--accent-color);
+  color: #fff;
+  padding: 11px 16px;
+  border-radius: 18px;
+  max-width: 310px;
+  word-break: break-word;
+  box-shadow: 0 1px 5px var(--shadow-color);
+  font-size: 1rem;
+}
+.bot-bubble .bubble-content {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
+/* Loading indicator (bot typing) */
+.bot-bubble.loading .bubble-content {
+  font-style: italic;
+  opacity: 0.7;
+}
+
+/* Responsive para celulares */
+@media (max-width: 600px) {
+  .chat-window {
+    max-width: 98vw;
+    min-width: 0;
+    height: 72vh;
+    padding: 8px 3px;
+  }
+  .chat-form textarea {
+    width: 90vw !important;
+    min-width: 0;
+    font-size: 1rem;
+    
+  }
+}
+
+/* -------------------------------------- */
+/* 5. Chat Form + Textarea (Multi-línea)  */
 /* -------------------------------------- */
 .chat-form {
+  width: 300px;
+  margin: 24px auto 0 auto;
+  display: flex;
+  justify-content: center;
+  background: none;
+  box-shadow: none;
+}
+
+.input-container {
+  position: relative;
+  width: 300px;
   display: flex;
   align-items: center;
 }
 
-.chat-form input {
+.input-container textarea {
+  width: 100%;
+  padding: 1rem 3.2rem 1rem 1.2rem; 
+  border: 1.5px solid var(--input-border);
+  border-radius: 16px;
+  background-color: var(--input-bg);
+  color: var(--text-primary);
+  font-size: 1.15rem;
+  resize: none;
+  min-height: 52px;
+  max-height: 160px;
+  box-sizing: border-box;
+  transition: border 0.2s;
+  outline: none;
+  box-shadow: 0 4px 12px var(--shadow-color);
+}
+
+.input-container textarea:disabled {
+  background-color: var(--bg-secondary);
+  color: var(--text-secondary);
+  opacity: 0.8;
+}
+
+.input-container textarea::placeholder {
+  color: var(--text-secondary);
+  font-family: 'Inter', sans-serif;
+  font-size: 1.1rem;
+}
+
+.input-container .arrow-btn {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: var(--accent-color);
+  color: white;
+  border-radius: 50%;
+  padding: 0.65rem;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* transition: background 0.2s; */
+  z-index: 2;
+  box-shadow: 0 2px 6px var(--shadow-color);
+}
+.input-container .arrow-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.input-container .arrow-btn svg {
+  display: block;
+}
+
+@media (max-width: 800px) {
+  .chat-window, .chat-form {
+    max-width: 98vw;
+  }
+  .input-container textarea {
+    font-size: 1rem;
+  }
+}
+
+/* Responsive para el celular */
+@media (max-width: 800px) {
+  .chat-window, .chat-form {
+    max-width: 98vw;
+  }
+  .input-container textarea {
+    font-size: 1rem;
+  }
+}
+
+.chat-form textarea {
   padding: 0.75rem 1rem;
   width: 320px;
   border: 1px solid var(--input-border);
-  border-radius: 9999px;
+  border-radius: 16px;
   outline: none;
   background-color: var(--input-bg);
   color: var(--text-primary);
   font-size: 1rem;
-  transition: background-color 0.3s ease, border-color 0.3s ease;
-}
+  font-family: 'Inter', sans-serif;
+  transition: background-color 0.3s, border-color 0.3s;
+  resize: none;
+  min-height: 42px;
+  max-height: 120px;
+  line-height: 1.5;
+  margin-right: 0.5rem;
+  text-align: center;
 
-.chat-form input::placeholder {
+}
+.chat-form textarea:disabled {
+  background-color: var(--bg-secondary);
+  color: var(--text-secondary);
+  opacity: 0.8;
+}
+.chat-form textarea::placeholder {
   color: var(--text-secondary);
 }
 
-/* Botón circular con flecha para enviar */
+/* Botón enviar */
 .arrow-btn {
   margin-left: 0.5rem;
   background-color: var(--text-primary);
@@ -146,27 +305,16 @@ button {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: background 0.2s ease;
+  /* transition: background 0.2s; */
 }
-
-body:not(.dark) .arrow-btn:hover {
-  background-color: #333333;
-}
-
-body.dark .arrow-btn {
-  background-color: var(--text-secondary);
-}
-
-body.dark .arrow-btn:hover {
-  background-color: #555555;
-}
-
-.arrow-btn svg {
-  display: block;
-}
+body:not(.dark) .arrow-btn:hover { background-color: #333333; }
+body.dark .arrow-btn { background-color: var(--text-secondary); }
+body.dark .arrow-btn:hover { background-color: #555555; }
+.arrow-btn svg { display: block; }
+.arrow-btn:disabled { opacity: 0.6; cursor: not-allowed; }
 
 /* -------------------------------------- */
-/* Caja de Respuesta del Chat             */
+/* 6. Caja de Respuesta y Otros           */
 /* -------------------------------------- */
 .response-box {
   margin-top: 2rem;
@@ -179,11 +327,11 @@ body.dark .arrow-btn:hover {
   color: var(--text-secondary);
   font-size: 1rem;
   line-height: 1.5;
-  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  transition: background-color 0.3s, box-shadow 0.3s;
 }
 
 /* -------------------------------------- */
-/* Login Page Styles                      */
+/* 7. Login Page Styles                   */
 /* -------------------------------------- */
 .login-wrapper {
   display: flex;
@@ -232,7 +380,7 @@ body.dark .arrow-btn:hover {
   background-color: var(--input-bg);
   color: var(--text-primary);
   font-size: 1rem;
-  transition: background-color 0.3s ease, border-color 0.3s ease;
+  transition: background-color 0.3s, border-color 0.3s;
 }
 
 .login-form input::placeholder {
@@ -249,7 +397,7 @@ body.dark .arrow-btn:hover {
   font-size: 1rem;
   font-weight: 500;
   cursor: pointer;
-  transition: background-color 0.2s ease;
+  transition: background-color 0.2s;
 }
 
 .login-form button:hover {
@@ -260,20 +408,13 @@ body.dark .arrow-btn:hover {
 body.dark .login-wrapper {
   background-color: var(--bg-secondary);
 }
-
 body.dark .login-card {
   background-color: var(--card-bg);
   box-shadow: 0 4px 12px var(--shadow-color);
 }
 
-body.dark .login-card h2,
-body.dark .login-form input,
-body.dark .login-form button {
-  /* Puedes afinar contraste si hace falta */
-}
-
 /* -------------------------------------- */
-/* Navbar Styles                           */
+/* 8. Navbar Styles                       */
 /* -------------------------------------- */
 .navbar {
   position: fixed;
@@ -290,9 +431,7 @@ body.dark .login-form button {
   z-index: 1000;
 }
 
-/* Aumentamos el tamaño del logo */
-/* Nueva regla para que el logo tenga fondo */
-/* Estilo por defecto (modo claro) */
+/* Logo grande en navbar */
 .navbar-left .logo-img {
   height: 120px;
   width: auto;
@@ -301,12 +440,9 @@ body.dark .login-form button {
   border-radius: 12px;
 }
 
-/* Cuando body tiene la clase .dark, cambiamos el fondo del logo */
+/* Dark mode: logo */
 body.dark .navbar-left .logo-img {
-  /* Usa un color que contraste en modo oscuro, por ejemplo: */
   background-color: var(--bg-secondary);
-  /* O bien, un gris más oscuro: */
-  /* background-color: #2a2a2a; */
 }
 
 .navbar-right {
@@ -321,13 +457,11 @@ body.dark .navbar-left .logo-img {
   height: 28px;
   margin-right: 1rem;
 }
-
 .theme-switch input {
   opacity: 0;
   width: 0;
   height: 0;
 }
-
 .switch-slider {
   position: absolute;
   cursor: pointer;
@@ -337,9 +471,8 @@ body.dark .navbar-left .logo-img {
   left: 0;
   right: 0;
   bottom: 0;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s;
 }
-
 .switch-slider .icon-sun,
 .switch-slider .icon-moon {
   position: absolute;
@@ -348,27 +481,11 @@ body.dark .navbar-left .logo-img {
   font-size: 14px;
   color: var(--card-bg);
 }
-
-.switch-slider .icon-sun {
-  left: 8px;
-}
-
-.switch-slider .icon-moon {
-  right: 8px;
-}
-
-.theme-switch input:checked + .switch-slider {
-  background-color: var(--accent-color);
-}
-
-.theme-switch input:checked + .switch-slider .icon-sun {
-  opacity: 0.3;
-}
-
-.theme-switch input:not(:checked) + .switch-slider .icon-moon {
-  opacity: 0.3;
-}
-
+.switch-slider .icon-sun { left: 8px; }
+.switch-slider .icon-moon { right: 8px; }
+.theme-switch input:checked + .switch-slider { background-color: var(--accent-color); }
+.theme-switch input:checked + .switch-slider .icon-sun { opacity: 0.3; }
+.theme-switch input:not(:checked) + .switch-slider .icon-moon { opacity: 0.3; }
 .switch-slider::before {
   position: absolute;
   content: '';
@@ -378,13 +495,11 @@ body.dark .navbar-left .logo-img {
   bottom: 3px;
   background-color: var(--card-bg);
   border-radius: 50%;
-  transition: transform 0.3s ease;
+  transition: transform 0.3s;
 }
-
 .theme-switch input:checked + .switch-slider::before {
   transform: translateX(32px);
 }
-
 .logout-btn {
   background-color: var(--accent-color);
   color: #fff;
@@ -392,23 +507,9 @@ body.dark .navbar-left .logo-img {
   border-radius: 8px;
   font-size: 0.9rem;
   font-weight: 500;
-  transition: background-color 0.2s ease;
+  transition: background-color 0.2s;
 }
-
-.logout-btn:hover {
-  background-color: #004bb5;
-}
-
-/* Ajustes en Dark Mode para Navbar */
-body.dark .navbar {
-  background-color: var(--card-bg);
-  box-shadow: 0 2px 8px var(--shadow-color);
-}
-
-body.dark .logout-btn {
-  background-color: var(--accent-color);
-}
-
-body.dark .logout-btn:hover {
-  background-color: #006bbd;
-}
+.logout-btn:hover { background-color: #004bb5; }
+body.dark .navbar { background-color: var(--card-bg); box-shadow: 0 2px 8px var(--shadow-color); }
+body.dark .logout-btn { background-color: var(--accent-color); }
+body.dark .logout-btn:hover { background-color: #006bbd; }

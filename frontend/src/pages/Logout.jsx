@@ -7,8 +7,8 @@ export default function Logout() {
   useEffect(() => {
     // Elimina el token
     localStorage.removeItem("token");
-    // Redirige al usuario a la página de login después de 2 segundos
-    const timer = setTimeout(() => { navigate('/login'); }, 2000);
+    // Redirige al usuario a la página de login después de 5 segundos
+    const timer = setTimeout(() => { navigate('/login'); }, 3000);
     return () => clearTimeout(timer);
   }, [navigate]);
 
