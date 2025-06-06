@@ -47,7 +47,7 @@ body {
   transition: background-color 0.3s, color 0.3s;
   overflow: hidden;
   min-height: 100vh;
-  background: #e0f2fe; /* Azul grisáceo MUY claro */
+  background: var(--bg-secondary);     /* Usa la variable del modo activo */
   background-size: 200% 200%;
   animation: gradientMove 22s ease-in-out infinite;
 }
@@ -74,28 +74,18 @@ button { font-family: inherit; border: none; background: none; cursor: pointer; 
 }
 
 .main-container {
-  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
-  /* Elimina justify-content: center; para permitir que el chat crezca */
-  min-height: calc(100vh - 48px); /* Ajusta si tu navbar cambió de altura */
-  margin-top: 48px;
-  padding-bottom: 20px; /* Espacio para el form de input */
-  /* No overflow-y: auto aquí */
+  height: calc(100vh - 80px); /* 80px = navbar height */
+  padding-top: 40px;          /* Espacio extra debajo del navbar */
+  padding-bottom: 20px;       /* (si quieres igual abajo) */
 }
 
-/* -------------------------------------- */
-/* 4. Chat Mejorado                       */
-/* -------------------------------------- */
-/* Chat window (contenedor de mensajes) */
 .chat-window {
   width: 100%;
-  max-width: 1200px;
-  flex: 1 1 auto;    /* Le permite crecer y ocupar el espacio disponible */
-  min-height: 350px;
-  max-height: 70vh;  /* o height: 70vh;  */
-  overflow-y: auto;
+  max-width: 1500px;
+  flex: 1 1 auto;
   background: var(--card-bg);
   border-radius: 20px;
   box-shadow: 0 4px 24px var(--shadow-color);
@@ -103,7 +93,9 @@ button { font-family: inherit; border: none; background: none; cursor: pointer; 
   margin-bottom: 18px;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
+  overflow-y: auto;
+  min-height: 0;     /* 👈 ESSENCIAL para que el flex permita scroll */
+  max-height: 100%;  /* O usa flex-grow: 1 como arriba */
 }
 
 /* Burbujas de chat */
@@ -585,3 +577,7 @@ body.dark .navbar { background-color: var(--card-bg); box-shadow: 0 2px 8px var(
 body.dark .logout-btn { background-color: var(--accent-color); }
 body.dark .logout-btn:hover { background-color: #006bbd; }
 
+body.dark .bot-bubble .bubble-content {
+  background: #b3b6c4;
+  color: #232323;
+}
