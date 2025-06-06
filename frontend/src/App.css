@@ -45,7 +45,7 @@ body {
   color: var(--text-primary);
   font-family: 'Inter', sans-serif;
   transition: background-color 0.3s, color 0.3s;
-  overflow: hidden;
+  overflow-x: hidden; 
   min-height: 100vh;
   background: var(--bg-secondary);     /* Usa la variable del modo activo */
   background-size: 200% 200%;
@@ -67,10 +67,8 @@ button { font-family: inherit; border: none; background: none; cursor: pointer; 
 /* 3. App Wrapper/Main Container          */
 /* -------------------------------------- */
 .app-wrapper {
-  position: relative;
+  min-height: 100vh;
   width: 100%;
-  height: 100vh;
-  overflow: hidden;
 }
 
 .main-container {
@@ -580,4 +578,38 @@ body.dark .logout-btn:hover { background-color: #006bbd; }
 body.dark .bot-bubble .bubble-content {
   background: #b3b6c4;
   color: #232323;
+}
+
+.footer-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100vw;
+  height: 42px;
+  background: rgba(255, 255, 255, 0.93);
+  color: #2563eb;
+  text-align: center;
+  font-size: 1rem;
+  font-weight: 500;
+  letter-spacing: 0.1px;
+  box-shadow: 0 -2px 12px 0 rgba(80,140,250,0.10);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.footer-bar a {
+  color: #2563eb;
+  text-decoration: underline;
+  font-weight: 600;
+}
+
+body.dark .footer-bar {
+  background: rgba(30, 32, 36, 0.96);
+  color: #8ec3ff;
+}
+
+body.dark .footer-bar a {
+  color: #7cb7ff;
 }

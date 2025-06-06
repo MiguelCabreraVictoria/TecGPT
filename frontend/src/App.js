@@ -57,6 +57,15 @@ export default function App() {
         {/* Ruta catch-all → redirige a /login */}
         <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
+
+      <footer className="footer-bar">
+        <span>
+          © TecGPT 2025 &nbsp; | &nbsp;
+          <a href="/terms" target="_blank" rel="noopener noreferrer">
+            Términos y condiciones
+          </a>
+        </span>
+      </footer>
     </div>
   );
 }
