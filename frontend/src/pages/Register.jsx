@@ -93,6 +93,20 @@ export default function Register() {
             onChange={(e) => setPassword(e.target.value)}
           />
           <button type="submit">Register</button>
+
+        <div className="login-bottom-text">
+          Already have an account?{" "}
+          <span
+            className="login-link"
+            tabIndex={0}
+            style={{ color: 'var(--accent-color)', cursor: 'pointer', fontWeight: 500 }}
+            onClick={() => navigate('/login')}
+            onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') navigate('/login'); }}
+          >
+            Login
+          </span>
+        </div>
+
         </form>
       </div>
     </div>

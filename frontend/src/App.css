@@ -89,7 +89,7 @@ button { font-family: inherit; border: none; background: none; cursor: pointer; 
 /* Chat window (contenedor de mensajes) */
 .chat-window {
   width: 100%;
-  max-width: 1400px;    
+  max-width: 1500px;    
   height: 70vh;        
   min-height: 350px;
   overflow-y: auto;
@@ -178,37 +178,23 @@ button { font-family: inherit; border: none; background: none; cursor: pointer; 
 /* 5. Chat Form + Textarea (Multi-línea)  */
 /* -------------------------------------- */
 .chat-form {
-  width: 300px;
+  width: 100%;
+  max-width: 1400px;   
   margin: 24px auto 0 auto;
   display: flex;
   justify-content: center;
   background: none;
   box-shadow: none;
+  padding: 0 24px; 
 }
 
 .input-container {
   position: relative;
-  width: 300px;
+  width: 100%;
   display: flex;
   align-items: center;
 }
 
-.input-container textarea {
-  width: 100%;
-  padding: 1rem 3.2rem 1rem 1.2rem; 
-  border: 1.5px solid var(--input-border);
-  border-radius: 16px;
-  background-color: var(--input-bg);
-  color: var(--text-primary);
-  font-size: 1.15rem;
-  resize: none;
-  min-height: 52px;
-  max-height: 160px;
-  box-sizing: border-box;
-  transition: border 0.2s;
-  outline: none;
-  box-shadow: 0 4px 12px var(--shadow-color);
-}
 
 .input-container textarea:disabled {
   background-color: var(--bg-secondary);
@@ -216,15 +202,14 @@ button { font-family: inherit; border: none; background: none; cursor: pointer; 
   opacity: 0.8;
 }
 
-.input-container textarea::placeholder {
-  color: var(--text-secondary);
-  font-family: 'Inter', sans-serif;
-  font-size: 1.1rem;
+.input-container textarea:focus::placeholder {
+  color: transparent;
+  transition: color 0.2s;
 }
 
 .input-container .arrow-btn {
   position: absolute;
-  right: 12px;
+  right: 35px;
   top: 50%;
   transform: translateY(-50%);
   background-color: var(--accent-color);
@@ -256,7 +241,7 @@ button { font-family: inherit; border: none; background: none; cursor: pointer; 
   }
 }
 
-/* Responsive para el celular */
+
 @media (max-width: 800px) {
   .chat-window, .chat-form {
     max-width: 98vw;
@@ -266,25 +251,31 @@ button { font-family: inherit; border: none; background: none; cursor: pointer; 
   }
 }
 
+
+
+.input-container textarea,
 .chat-form textarea {
-  padding: 0.75rem 1rem;
-  width: 320px;
-  border: 1px solid var(--input-border);
+  width: 100%;
+  min-width: 0;
+  padding: 1.3rem 3.2rem 1.3rem 1.2rem; /* MÁS padding arriba y abajo */
+  border: 1.5px solid var(--input-border);
   border-radius: 16px;
-  outline: none;
   background-color: var(--input-bg);
   color: var(--text-primary);
-  font-size: 1rem;
+  font-size: 1.17rem;
   font-family: 'Inter', sans-serif;
-  transition: background-color 0.3s, border-color 0.3s;
   resize: none;
-  min-height: 42px;
-  max-height: 120px;
-  line-height: 1.5;
+  min-height: 68px;       /* <-- aquí el cambio principal */
+  max-height: 180px;
+  box-sizing: border-box;
+  box-shadow: 0 4px 12px var(--shadow-color);
+  transition: background-color 0.3s, border-color 0.3s;
+  outline: none;
   margin-right: 0.5rem;
   text-align: center;
-
 }
+
+
 .chat-form textarea:disabled {
   background-color: var(--bg-secondary);
   color: var(--text-secondary);
@@ -411,6 +402,17 @@ body.dark .login-wrapper {
 body.dark .login-card {
   background-color: var(--card-bg);
   box-shadow: 0 4px 12px var(--shadow-color);
+}
+
+.login-bottom-text {
+  margin-top: 1.3rem;
+  font-size: 1rem;
+  text-align: center;
+}
+.login-link:hover,
+.login-link:focus {
+  text-decoration: underline;
+  outline: none;
 }
 
 /* -------------------------------------- */
