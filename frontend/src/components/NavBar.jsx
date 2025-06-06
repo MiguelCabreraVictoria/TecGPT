@@ -5,24 +5,31 @@ import logo from '../assets/logoTecGpt.png';
 export default function NavBar({ theme, toggleTheme, onLogout }) {
   const location = useLocation();
   const navigate = useNavigate();
-  const currentPath = location.pathname;
 
-  // ¿Estamos en login/register?
-  const isCompact = currentPath === '/login' || currentPath === '/register';
-  const showLogout = !isCompact;
+  const currentPath = location.pathname;
+  const showLogout = currentPath !== '/login' && currentPath !== '/register';
 
   const handleLogout = () => {
     navigate('/logout');
   };
 
+  // Solo muestra branding completo en /chat
+  const showBranding = currentPath === '/chat';
+
   return (
-    <nav className={`navbar${isCompact ? ' navbar--compact' : ''}`}>
+    <nav className="navbar">
       <div className="navbar-left">
-        {/* Logo solo si NO es compacta */}
-        {!isCompact && (
-          <img src={logo} alt="TecGPT Logo" className="logo-img" />
-        )}
+        
+        <img src={logo} alt="TecGPT Logo" className="logo-img-large" />
       </div>
+
+      
+      {showBranding && (
+        <div className="navbar-center">
+          <span className="brand-logo">TecGPT</span>
+        </div>
+      )}
+
       <div className="navbar-right">
         <label className="theme-switch">
           <input
