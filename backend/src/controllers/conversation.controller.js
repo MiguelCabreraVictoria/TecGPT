@@ -12,7 +12,7 @@ export const conversation = async (req, res) => {
         const userID = req.user?.userId;
         logger.activityLogger.info(`User ${userId} sent prompt: ${prompt}`);
         // Llama al modelo externo (reemplaza "url" por la URL real)
-        const modelResponse = await axios.post("url", { prompt });
+        const modelResponse = await axios.post("172.20.100.2:8000", { prompt });
         logger.gptLogger.info(`Response: ${prompt}`);
 
         res.json({ response: modelResponse.data });
