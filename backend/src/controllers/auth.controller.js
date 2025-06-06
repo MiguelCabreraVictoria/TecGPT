@@ -1,6 +1,7 @@
 import prisma from '../lib/prisma.js';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import logger from "../utils/logger/logger.js"
 import RoleType from '../common/enums/RoleType.enum.js';
 
 
@@ -52,6 +53,7 @@ export const login = async (req, res) => {
         }
 
         const token = jwt.sign({ userId: user.userId }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRATES_IN });
+        logger.loginLogger.info(`ID ${user.userId} logged in`)
         return res.status(200).json({
             state: "200",
             message: 'Login successful',
@@ -66,7 +68,7 @@ export const login = async (req, res) => {
         });
 
     } catch (error) {
-        console.error('Error during login:', error);
+        logger.loginLogger.error(`Error during for email ${email}: ${error.message} `);
         return res.status(500).json({ 
             state: "500",
             message: 'Internal server error' });

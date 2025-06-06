@@ -29,7 +29,7 @@ app.use(
   cors({
     origin: isProduction ? "https://frontend.misitio.com": process.env.CORS_ORIGIN, // TODO cambiar por el dominio del frontend
     credentials: true, // Permite enviar cookies y encabezados de autenticación
-    methods: ["GET", "POST", "PUT", "DELETE"],
+    methods: ["GET", "POST"],
     allowedHeaders: ["Content-Type", "Authorization"], // Permite encabezados específicos
     legacyHeaders: false, // Desactiva encabezados obsoletos
   })

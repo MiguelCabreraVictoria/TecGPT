@@ -1,5 +1,7 @@
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
+import { authToken } from '../middlewares/authToken.middleware.js';
+import { authorizeRoles } from '../middlewares/authorizeRoles.middleware.js';
 
 const options = {
   definition: {
@@ -25,5 +27,5 @@ const options = {
 const swaggerSpec = swaggerJSDoc(options);
 
 export function setupSwagger(app) {
-  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+  app.use('/api-docs',[authToken, authorizeRoles], swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 }
