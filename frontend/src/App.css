@@ -46,21 +46,22 @@ body {
   font-family: 'Inter', sans-serif;
   transition: background-color 0.3s, color 0.3s;
   overflow: hidden;
+  min-height: 100vh;
+  background: #e0f2fe; /* Azul grisáceo MUY claro */
+  background-size: 200% 200%;
+  animation: gradientMove 22s ease-in-out infinite;
+}
+
+@keyframes gradientMove {
+  0% { background-position: 0% 50%;}
+  50% { background-position: 100% 50%;}
+  100% { background-position: 0% 50%;}
 }
 
 a { text-decoration: none; color: inherit; }
 button { font-family: inherit; border: none; background: none; cursor: pointer; }
 
-/* Fondo dinámico opcional */
-.background {
-  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-  pointer-events: none; z-index: -999;
-  background: radial-gradient(
-    circle at var(--mouseX) var(--mouseY),
-    var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%
-  );
-  /* transition: background 0.1s; */
-}
+
 
 /* -------------------------------------- */
 /* 3. App Wrapper/Main Container          */
@@ -77,10 +78,11 @@ button { font-family: inherit; border: none; background: none; cursor: pointer; 
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  height: calc(100vh - 88px); /* Altura total menos navbar */
-  margin-top: 88px;           /* Deja espacio para la navbar */
-  overflow-y: auto;
+  /* Elimina justify-content: center; para permitir que el chat crezca */
+  min-height: calc(100vh - 48px); /* Ajusta si tu navbar cambió de altura */
+  margin-top: 48px;
+  padding-bottom: 20px; /* Espacio para el form de input */
+  /* No overflow-y: auto aquí */
 }
 
 /* -------------------------------------- */
@@ -89,9 +91,10 @@ button { font-family: inherit; border: none; background: none; cursor: pointer; 
 /* Chat window (contenedor de mensajes) */
 .chat-window {
   width: 100%;
-  max-width: 1500px;    
-  height: 70vh;        
+  max-width: 1500px;
+  flex: 1 1 auto;    /* Le permite crecer y ocupar el espacio disponible */
   min-height: 350px;
+  max-height: 70vh;  /* o height: 70vh;  */
   overflow-y: auto;
   background: var(--card-bg);
   border-radius: 20px;
@@ -329,24 +332,53 @@ body.dark .arrow-btn:hover { background-color: #555555; }
   align-items: center;
   justify-content: center;
   height: 100vh;
-  background-color: var(--bg-secondary);
+  background: #e0f2fe; 
 }
 
-.login-card {
-  background-color: var(--card-bg);
-  padding: 2rem;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px var(--shadow-color);
-  width: 320px;
+.login-brand {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  margin-bottom: 14px;
+}
+
+.brand-logo {
+  font-size: 3.9rem;
+  font-weight: 800;
+  color: #2563eb;
+  background: linear-gradient(90deg, #60a5fa 40%, #2563eb 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: -1px;
+  text-align: center;
+  margin-bottom: 0.2em;
+  margin-top: 0.1em;
+  text-shadow: 0 4px 24px #60a5fa22;
+  font-family: 'Inter', sans-serif;
+}
+.login-card h2 {
+  margin-bottom: 1.2rem;
+  margin-top: 0.3rem;
+  font-size: 1rem;
+  font-weight: 600;
   text-align: center;
 }
 
-.login-card h2 {
-  margin-bottom: 1.5rem;
-  color: var(--text-primary);
-  font-size: 1.5rem;
-  font-weight: 600;
+.login-card {
+  background: rgba(255,255,255,0.90);
+  backdrop-filter: blur(14px);
+  border-radius: 24px;
+  box-shadow: 0 8px 32px 0 rgba(80,140,250,0.14);
+  padding: 4.2rem 3.8rem 3.7rem 3.8rem; /* Más padding */
+  width: 600px;  /* Antes 320px, ahora más ancho */
+  min-height: 500px; /* Opcional, para hacerlo más alto */
+  text-align: center;
+  margin: 0 auto;
 }
+
+
 
 .login-error {
   background-color: #ffcccc;
@@ -418,19 +450,41 @@ body.dark .login-card {
 /* -------------------------------------- */
 /* 8. Navbar Styles                       */
 /* -------------------------------------- */
+/* NAVBAR NORMAL (chat, app) */
 .navbar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100px;
-  background-color: var(--card-bg);
-  box-shadow: 0 2px 8px var(--shadow-color);
+  height: 80px;
+  background: rgba(245, 250, 255, 0.75);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 24px 0 rgba(96, 165, 250, 0.12);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 1.5rem;
+  padding: 0 2.2rem;
   z-index: 1000;
+  border-bottom: 1.5px solid rgba(80, 140, 250, 0.08);
+  transition: height 0.22s cubic-bezier(.4,0,.2,1);
+}
+
+/* NAVBAR COMPACTA (solo en login y register) */
+.navbar--compact {
+  height: 48px;
+  justify-content: flex-end;
+  padding: 0 1.2rem;
+}
+
+.navbar--compact .navbar-left {
+  display: none;
+}
+
+.navbar--compact .logout-btn {
+  display: none;
+}
+
+.navbar--compact .navbar-right {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
 }
 
 /* Logo grande en navbar */
@@ -515,3 +569,4 @@ body.dark .navbar-left .logo-img {
 body.dark .navbar { background-color: var(--card-bg); box-shadow: 0 2px 8px var(--shadow-color); }
 body.dark .logout-btn { background-color: var(--accent-color); }
 body.dark .logout-btn:hover { background-color: #006bbd; }
+

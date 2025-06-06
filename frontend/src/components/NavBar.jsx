@@ -2,23 +2,26 @@ import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import logo from '../assets/logoTecGpt.png';
 
-
 export default function NavBar({ theme, toggleTheme, onLogout }) {
   const location = useLocation();
   const navigate = useNavigate();
-  const currentPath = location.pathname; // por ejemplo "/login" o "/chat" o "/register"
+  const currentPath = location.pathname;
 
-  // Oculta el botón de logout si estamos en /login o /register
-  const showLogout = currentPath !== '/login' && currentPath !== '/register';
+  // ¿Estamos en login/register?
+  const isCompact = currentPath === '/login' || currentPath === '/register';
+  const showLogout = !isCompact;
 
   const handleLogout = () => {
     navigate('/logout');
   };
 
   return (
-    <nav className="navbar">
+    <nav className={`navbar${isCompact ? ' navbar--compact' : ''}`}>
       <div className="navbar-left">
-        <img src={logo} alt="TecGPT Logo" className="logo-img" />
+        {/* Logo solo si NO es compacta */}
+        {!isCompact && (
+          <img src={logo} alt="TecGPT Logo" className="logo-img" />
+        )}
       </div>
       <div className="navbar-right">
         <label className="theme-switch">

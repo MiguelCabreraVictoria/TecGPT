@@ -5,6 +5,7 @@ export default function Chat() {
   const [messages, setMessages] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const chatWindowRef = useRef(null);
+  const textareaRef = useRef(null); // 1. Ref para el textarea
 
   useEffect(() => {
     if (chatWindowRef.current) {
@@ -39,8 +40,8 @@ export default function Chat() {
     } catch {
     }
     setPrompt('');
+    textareaRef.current?.focus(); // 3. Vuelve a enfocar el textarea
 
-    
     setTimeout(() => {
       setMessages((msgs) => [...msgs, { type: 'bot', text: botMsg }]);
       setIsLoading(false);
@@ -76,10 +77,10 @@ export default function Chat() {
         )}
       </div>
 
-
       <form className="chat-form" onSubmit={handleSubmit}>
         <div className="input-container">
           <textarea
+            ref={textareaRef} // 2. Asigna el ref
             rows={1}
             placeholder="How can I help you?"
             value={prompt}
@@ -95,9 +96,6 @@ export default function Chat() {
           </button>
         </div>
       </form>
-
-
-
     </div>
   );
 }

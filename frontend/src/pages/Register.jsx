@@ -57,7 +57,9 @@ export default function Register() {
 
   return (
     <div className="login-wrapper">
+      
       <div className="login-card">
+        <div className="brand-logo">TecGPT</div>
         <h2>Create Account</h2>
         {error && <div className="login-error">{error}</div>}
         {success && <div className="login-success">{success}</div>}
