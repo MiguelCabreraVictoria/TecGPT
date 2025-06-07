@@ -4,10 +4,13 @@ import rateLimit from "express-rate-limit";
 import morgan from "morgan";
 import cors from "cors";
 import helmet from "helmet";
+import dotenv from "dotenv"
 import { initRoles } from './lib/initRoles.js';
 import { setupSwagger } from "./docs/swagger.js"; 
 
+dotenv.config();
 const app = express();
+
 
 await initRoles();
 
@@ -24,9 +27,9 @@ app.use(morgan('dev'));
 // CORS
 app.use(
   cors({
-    origin: isProduction ? "https://frontend.misitio.com": "http://localhost:5001", // TODO cambiar por el dominio del frontend
+    origin: isProduction ? "https://frontend.misitio.com": process.env.CORS_ORIGIN, // TODO cambiar por el dominio del frontend
     credentials: true, // Permite enviar cookies y encabezados de autenticación
-    methods: ["GET", "POST", "PUT", "DELETE"],
+    methods: ["GET", "POST"],
     allowedHeaders: ["Content-Type", "Authorization"], // Permite encabezados específicos
     legacyHeaders: false, // Desactiva encabezados obsoletos
   })
@@ -60,7 +63,7 @@ app.use(
             defaultSrc: ["'self'"],
             scriptSrc: ["'self'", "https://apis.google.com"],
             objectSrc: ["'none'"],
-            connectSrc: ["'self'", "http://localhost:5001"], 
+            connectSrc: ["'self'", process.env.CORS_ORIGIN], 
           },
         },
     referrerPolicy: { policy: "no-referrer" }, // Oculta la URL de origen en los requests

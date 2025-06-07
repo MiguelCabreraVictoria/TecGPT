@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 export default function Login({ onLogin }) {
   const [email, setEmail] = useState('');
@@ -15,7 +15,7 @@ export default function Login({ onLogin }) {
     }
 
     try {
-      const response = await fetch("http://localhost:3000/auth/login", {
+      const response = await fetch("http://172.20.100.111:3000/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password })
@@ -44,7 +44,8 @@ export default function Login({ onLogin }) {
   return (
     <div className="login-wrapper">
       <div className="login-card">
-        <h2>Welcome Back</h2>
+        <div className="brand-logo">TecGPT</div>
+        <h2>Welcome Back!</h2>
         {error && <div className="login-error">{error}</div>}
         <form onSubmit={handleSubmit} className="login-form">
           <input
@@ -61,9 +62,21 @@ export default function Login({ onLogin }) {
           />
           <button type="submit">Login</button>
         </form>
-        <div style={{ marginTop: '1rem', textAlign: 'center' }}>
-          <Link to="/register">Register here</Link>
+
+        <div className="login-bottom-text">
+          Register {" "}
+          <span
+            className="login-link"
+            style= {{ color: 'var(--accent-color)', cursor: 'pointer', fontWeight: 500 }}
+            onClick={() => navigate('/register')}
+            onKeyDown={(e) => { if (e.key === 'Enter') navigate('/register'); }}
+            >
+              Here!
+            </span>
+
+            
         </div>
+
       </div>
     </div>
   );

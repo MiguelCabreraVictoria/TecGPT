@@ -9,9 +9,9 @@ export const authToken = async (req, res, next) => {
     }
 
     try {
-        const decoded = jwt.verify(token, "secret");
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
         const user = await prisma.user.findUnique({
-            where: { userId: decoded.id },
+            where: { userId: decoded.userId },
             select: {
                 userId:true, 
                 email: true,

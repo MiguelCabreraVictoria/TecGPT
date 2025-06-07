@@ -1,4 +1,4 @@
-import RoleType from "../common/enums/RoleType.enum";
+import RoleType from "../common/enums/RoleType.enum.js";
 
 export const authorizeRoles = (req, res, next) => {
     if (!req.user || req.user.role !== RoleType.ADMIN) {
